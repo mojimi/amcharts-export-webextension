@@ -72,8 +72,6 @@ function loadJS(url){
     })
 }
 
-
-//
 function loadAmChartsExportMenu () {
     AmCharts.charts.forEach(chart => {
         const appendToEle = chart.containerDiv.parentElement.parentElement;
@@ -91,6 +89,7 @@ function loadAmChartsExportMenu () {
             <input id="font-range" type="range" min="8" max="30" value="${chart.fontSize}">
             <label for="font-color-range">Cor da fonte</label>
             <input id="font-color-range" type="color" value="${chart.color}">
+            <button class="export-btn">Exportar</button>
         </div>`);
         const drawer = menuEle.querySelector('.side-menu-drawer');
         menuEle.querySelector('#radius-range').oninput = evt => {
@@ -107,22 +106,8 @@ function loadAmChartsExportMenu () {
         }
         menuEle.querySelector('.side-menu-close').onclick = evt => drawer.style.transform = 'translateX(100%)';
         menuEle.querySelector('.side-menu-button').onclick = evt => drawer.style.transform = 'translateX(0px)';
+        menuEle.querySelector('.export-btn').onclick = evt => amChartToCanvas(chart);
         appendToEle.appendChild(menuEle);
-        AmCharts.export(chart, {
-            enabled : true,
-            libs : {autoLoad : false},
-            exportTitles : true,
-            menu : [
-                {
-                    class: 'export-main',
-                    label : 'Exportar',
-                    menu : [
-                        {label : 'html2canvas', click : canvasClick},
-                        {label : 'canvg', click : canvgClick}
-                    ]
-                }
-            ]
-        })
     })
     
 }
@@ -171,4 +156,4 @@ loadJS('https://raw.githack.com/mojimi/string-format/master/html2canva.test.js')
 .then( () => loadJS('https://raw.githack.com/mojimi/string-format/master/rgbcolor.test.js'))
 .then( () => loadJS('https://raw.githack.com/mojimi/string-format/master/canvg2.test.js'))
 .then( () => loadJS('https://raw.githack.com/amcharts/amcharts3/master/amcharts/plugins/export/export.min.js'))
-.then(loadAmChartsExport)
+.then(loadAmChartsExportMenu)
