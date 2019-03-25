@@ -92,6 +92,7 @@ function loadAmChartsExportMenu () {
             <button class="export-btn">Exportar</button>
         </div>`);
         const drawer = menuEle.querySelector('.side-menu-drawer');
+        console.log(menuEle);
         menuEle.querySelector('#radius-range').oninput = evt => {
             chart.radius = evt.target.value;
             chart.validateNow();
