@@ -1,7 +1,3 @@
-
-const sideMenuHtml = 
-
-
 function txtAnchorToAlign(anchor) {
     if(anchor === 'middle'){
         return 'center';
