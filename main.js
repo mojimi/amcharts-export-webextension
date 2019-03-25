@@ -95,7 +95,6 @@ function loadAmChartsExportMenu () {
             <input id="font-color-range" type="color" value="${chart.color}">
             <button class="export-btn">Exportar</button>
         </div>`);
-        const drawer = menuEle.querySelector('.side-menu-drawer');
         drawer.querySelector('#radius-range').oninput = evt => {
             chart.radius = evt.target.value;
             chart.validateNow();
