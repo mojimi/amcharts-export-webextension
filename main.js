@@ -77,9 +77,13 @@ function loadAmChartsExportMenu () {
         const appendToEle = chart.containerDiv.parentElement.parentElement;
         //TODO: Add different options based on chart type
         //TODO: Add inputs to change colors
-        const menuEle = eleFromStr(
-        `<button class="side-menu-button" style="position: absolute;top: 0;right: 0;padding: .3rem;cursor: pointer;border-radius: 50%;border: none;background: white;color: #000000c4;font-size: 2rem;margin-right: .5rem;transition: .5s ease;">☰</button>
-        <div class="side-menu-drawer" style="position: absolute;width: 300px;height: 100%;top: 0;right: 0;background: #ffffffbd;transform: translateX(100%);transform-origin: right;transition: .5s ease;padding: 1.5rem;">
+        const button = eleFromStr(
+        `<button class="side-menu-button" style="position: absolute;top: 0;right: 0;padding: .3rem;cursor: pointer;border-radius: 50%;border: none;background: white;color: #000000c4;font-size: 2rem;margin-right: .5rem;transition: .5s ease;">
+            ☰
+        </button>`
+        )
+        const drawer = eleFromStr(
+        `<div class="side-menu-drawer" style="position: absolute;width: 300px;height: 100%;top: 0;right: 0;background: #ffffffbd;transform: translateX(100%);transform-origin: right;transition: .5s ease;padding: 1.5rem;">
             <a class="side-menu-close" style="float:left" href="#">&times</a>
             <h3 style="margin-bottom: 0;text-align: center;margin: 0;">Customizações</h3>
             <hr>
@@ -92,22 +96,21 @@ function loadAmChartsExportMenu () {
             <button class="export-btn">Exportar</button>
         </div>`);
         const drawer = menuEle.querySelector('.side-menu-drawer');
-        console.log(menuEle);
-        menuEle.querySelector('#radius-range').oninput = evt => {
+        drawer.querySelector('#radius-range').oninput = evt => {
             chart.radius = evt.target.value;
             chart.validateNow();
         }
-        menuEle.querySelector('#font-range').oninput = evt => {
+        drawer.querySelector('#font-range').oninput = evt => {
             chart.fontSize = evt.target.value;
             chart.validateNow();
         }
-        menuEle.querySelector('#font-color-range').oninput = evt => {
+        drawer.querySelector('#font-color-range').oninput = evt => {
             chart.color = evt.target.value;
             chart.validateNow();
         }
-        menuEle.querySelector('.side-menu-close').onclick = evt => drawer.style.transform = 'translateX(100%)';
-        menuEle.querySelector('.side-menu-button').onclick = evt => drawer.style.transform = 'translateX(0px)';
-        menuEle.querySelector('.export-btn').onclick = evt => amChartToCanvas(chart);
+        drawer.querySelector('.export-btn').onclick = evt => amChartToCanvas(chart);
+        drawer.querySelector('.side-menu-close').onclick = evt => drawer.style.transform = 'translateX(100%)';
+        button.querySelector('.side-menu-button').onclick = evt => drawer.style.transform = 'translateX(0px)';
         appendToEle.appendChild(menuEle);
     })
     
