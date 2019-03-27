@@ -18,7 +18,7 @@ function chartTextToHtml(chart) {
     const textDivs = document.createElement('div');
     textDivs.setAttribute('style', 'position: absolute; top: 0')
     chart.containerDiv.appendChild(textDivs);
-    chart.containerDiv.querySelectorAll('text')
+    chart.containerDiv.querySelectorAll('text:not(.amcharts-zoom-out-label)')
     .forEach(txt => {
         const newTxt = document.createElement('div');
         textDivs.appendChild(newTxt);
@@ -153,6 +153,9 @@ function loadAmChartsExportMenu () {
             chart.fontSize = newFontSize;
             if(chart.graphs && chart.graphs.length > 0){
                 chart.graphs.forEach( graph => graph.fontSize = newFontSize)
+            }
+            if(chart.categoryAxis){
+                chart.categoryAxis.fontSize = newFontSize;
             }
             chart.validateNow();
         }
@@ -375,6 +378,7 @@ function amChartToCanvas(chart, scale) {
         allowTaint : false,
         onclone : doc => {
             const ele = doc.querySelector('[html2canvas-current-div="true"]');
+            ele.querySelectorAll('[class*="amcharts-zoom-out"]').forEach(rmv => rmv.remove());
             ele.querySelectorAll('*').forEach(child => {
                 child.style.backgroundColor = 'transparent'
             });
