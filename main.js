@@ -363,6 +363,15 @@ function loadAmChartsExportMenu () {
             button.style.visibility = 'hidden';
             drawer.style.transform = 'translateX(0px)';
         }
+        const drawerExists = appendToEle.querySelector('.side-menu-drawer');
+        const buttonExists = appendToEle.querySelector('.side-menu-button');
+        //If already loaded, reload
+        if(drawerExists){
+            drawerExists.remove();
+        }
+        if(buttonExists){
+            buttonExists.remove();
+        }
         appendToEle.appendChild(button);
         appendToEle.appendChild(drawer);
     })
