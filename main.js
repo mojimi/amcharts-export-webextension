@@ -117,7 +117,8 @@ function initAmChartExportMenu(chart, i){
             left : 'Left',
             right : 'Right',
             enable : 'Enabled',
-            verticalMargin : 'Vertical Margin'
+            verticalMargin : 'Vertical Margin',
+            includeTitle : 'Include title'
         },
         'pt-BR' : {
             fontSize : 'Tamanho do texto',
@@ -137,7 +138,8 @@ function initAmChartExportMenu(chart, i){
             left : 'Esquerda',
             right : 'Direita',
             enable : 'Habilitado',
-            verticalMargin : 'Margem vertical'
+            verticalMargin : 'Margem vertical',
+            includeTitle : 'Incluir título'
         }
     }
     let texts = translations[navigator.language];
@@ -357,12 +359,16 @@ function initAmChartExportMenu(chart, i){
         input.onmousedown = evt => input.parentElement.parentElement.style.opacity = '0.35';
         input.onmouseup = evt => input.parentElement.parentElement.style.opacity = '1';
     })
+    //Include title checkbox
+    const titleIncludeCheck = eleFromStr(`<input style="float: right" id="title-include-${i}" checked="false" type="checkbox">`);
+    drawer.insertAdjacentHTML('beforeend',`<label for="title-include-${i}" style="display : inline-block">${texts.includeTitle}</label>`);
+    drawer.insertAdjacentElement('beforeend',titleIncludeCheck);
     //Export Button
     const exportButton = eleFromStr(`<button style="width: 100%;margin-top: 2rem;border: 1px solid lightgray;padding: .5rem;background: white;cursor: pointer;" class="export-btn">${texts.exportButton}</button>`);
     exportButton.onclick = evt => {
         button.style.visibility = 'visible';
         drawer.style.transform = 'translateX(100%)';
-        amChartToCanvas(chart, 3.25)
+        amChartToCanvas(chart, 3.25, titleIncludeCheck.checked)
         .then(downloadCanvas)
     }
     drawer.insertAdjacentElement('beforeend',exportButton);
@@ -387,7 +393,7 @@ function initAmChartExportMenu(chart, i){
     appendToEle.appendChild(button);
     appendToEle.appendChild(drawer);
 }
-function amChartToCanvas(chart, scale) {
+function amChartToCanvas(chart, scale, includeTitle) {
     const options = {
         backgroundColor : null,
         scale : scale,
@@ -412,8 +418,11 @@ function amChartToCanvas(chart, scale) {
 
         }
     }
-    //TODO: Change scope based on wether the user wants labels
-    const outerDiv = chart.containerDiv;
+    let outerDiv = chart.containerDiv;
+    if(includeTitle){
+        //Don't even ask
+        outerDiv = chart.containerDiv.parentElement.parentElement.parentElement.parentElement;
+    }
     document.querySelectorAll('[html2canvas-current-div="true"]').forEach(ele => ele.removeAttribute('html2canvas-current-div'))
     outerDiv.setAttribute('html2canvas-current-div', 'true');
     const newTxtDivs = chartTextToHtml(chart);
@@ -429,7 +438,7 @@ function amChartToCanvas(chart, scale) {
         return canvas;
     })
 }
-loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@master/libs/html2canvas.min.js')
-.then( () => loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@master/libs/rgbcolor.min.js'))
-.then( () => loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@master/libs/canvg.min.js'))
+loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@latest/libs/html2canvas.min.js')
+.then( () => loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@latest/libs/rgbcolor.min.js'))
+.then( () => loadJS('https://cdn.jsdelivr.net/gh/mojimi/amcharts-export-webextension@latest/libs/canvg.min.js'))
 .then(loadAmChartsExportMenu)
