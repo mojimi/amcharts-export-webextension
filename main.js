@@ -359,16 +359,18 @@ function initAmChartExportMenu(chart, i){
         input.onmousedown = evt => input.parentElement.parentElement.style.opacity = '0.35';
         input.onmouseup = evt => input.parentElement.parentElement.style.opacity = '1';
     })
-    //Include title checkbox
+    /*Include title checkbox
+    Removed for now, it broke everything
     const titleIncludeCheck = eleFromStr(`<input style="float: right" id="title-include-${i}" checked="false" type="checkbox">`);
     drawer.insertAdjacentHTML('beforeend',`<label for="title-include-${i}" style="display : inline-block">${texts.includeTitle}</label>`);
     drawer.insertAdjacentElement('beforeend',titleIncludeCheck);
+    */
     //Export Button
     const exportButton = eleFromStr(`<button style="width: 100%;margin-top: 2rem;border: 1px solid lightgray;padding: .5rem;background: white;cursor: pointer;" class="export-btn">${texts.exportButton}</button>`);
     exportButton.onclick = evt => {
         button.style.visibility = 'visible';
         drawer.style.transform = 'translateX(100%)';
-        amChartToCanvas(chart, 3.25, titleIncludeCheck.checked)
+        amChartToCanvas(chart, 3.25, /*titleIncludeCheck.checked*/)
         .then(downloadCanvas)
     }
     drawer.insertAdjacentElement('beforeend',exportButton);
@@ -393,7 +395,7 @@ function initAmChartExportMenu(chart, i){
     appendToEle.appendChild(button);
     appendToEle.appendChild(drawer);
 }
-function amChartToCanvas(chart, scale, includeTitle) {
+function amChartToCanvas(chart, scale, includeTitle=false) {
     const options = {
         backgroundColor : null,
         scale : scale,
