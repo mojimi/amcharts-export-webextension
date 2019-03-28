@@ -147,7 +147,7 @@ function initAmChartExportMenu(chart, i){
     const appendToEle = chart.containerDiv.parentElement.parentElement.parentElement;
     //TODO: Add inputs to change colors
     const button = eleFromStr(
-    `<button class="side-menu-button" style="position: absolute;top: 0;right: 0;padding: .3rem;cursor: pointer;border-radius: 50%;border: none;background: transparent;color: inherit;font-size: 2rem;margin-right: .5rem;transition: .2s ease;">
+    `<button class="side-menu-button" style="margin-bottom : 1rem;position: absolute;top: 0;right: 0;padding: .3rem;cursor: pointer;border-radius: 50%;border: none;background: transparent;color: inherit;font-size: 2rem;margin-right: .5rem;transition: .2s ease;">
         ☰
     </button>`
     )
