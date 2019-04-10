@@ -448,7 +448,7 @@ function initAmChartExportMenu(chart, i){
     const chartOptions = eleFromStr('<div class="chart-options-div"></div>');
     //--Global AmChart options--
     //Font Size
-    const fontSizeInput = eleFromStr(`<input type="range" min="8" max="50" value="${chart.fontSize}">`);
+    const fontSizeInput = eleFromStr(`<input type="range" min="5" max="80" value="${chart.fontSize}">`);
     fontSizeInput.oninput = evt => {
         const newFontSize = Number(fontSizeInput.value)
         chart.fontSize = newFontSize;
@@ -511,7 +511,7 @@ function initAmChartExportMenu(chart, i){
     //--Pie Chart options--
     if(chart.type === 'pie'){
         //Pie Radius
-        const chartRadiusInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.radiusReal || 200}" max="${chart.radiusReal*2 || 350}">`);
+        const chartRadiusInput = eleFromStr(`<input type="range" step="5" min="0" value="${chart.radiusReal || 200}" max="${screen.width/2}">`);
         chartRadiusInput.oninput = evt => {
             chart.radius = Number(chartRadiusInput.value);
             chart.validateNow();
@@ -527,7 +527,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.angle}</label>`);
         chartOptions.appendChild(chartAngleInput);
         //Pie Max label width
-        const chartLabelWidthInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.maxLabelWidth || 100}" max="250">`);
+        const chartLabelWidthInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.maxLabelWidth || 100}" max="350">`);
         chartLabelWidthInput.oninput = evt => {
             chart.maxLabelWidth = Number(chartLabelWidthInput.value);
             chart.validateNow();
@@ -535,7 +535,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.maxLabelWidth}</label>`);
         chartOptions.appendChild(chartLabelWidthInput);
         //Pie label radius
-        const chartLabelRadiusInput = eleFromStr(`<input type="range" step="1" min="-100" value="${chart.labelRadius || 20}" max="300">`);
+        const chartLabelRadiusInput = eleFromStr(`<input type="range" step="5" min="-150" value="${chart.labelRadius || 20}" max="500">`);
         chartLabelRadiusInput.oninput = evt => {
             chart.labelRadius = Number(chartLabelRadiusInput.value);
             chart.validateNow();
@@ -554,7 +554,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.horizontalMargin}</label>`);
         chartOptions.appendChild(horizontalMarginInput);
         //Vertical Margin
-        const verticalMarginInput = eleFromStr(`<input style="margin-bottom : 1rem" value="${chart.marginBottom}" step="10" type="range" min="0" max="400" value="0">`);
+        const verticalMarginInput = eleFromStr(`<input style="margin-bottom : 1rem" value="${chart.marginBottom}" step="10" type="range" min="0" max="500" value="0">`);
         verticalMarginInput.oninput = evt => {
             chart.autoMargins = false;
             chart.marginTop = Number(verticalMarginInput.value);
