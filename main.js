@@ -28,18 +28,14 @@ function renderColorOptions(chart, texts, colorsDiv) {
         //Manual Colors
         const colorsManual = eleFromStr('<div class="mini-colors"></div>');
         const colorField = chart.colorField || '_fillColor_';
-        chart.dataProvider.forEach(data => {
+        chart.dataProvider.forEach( (data,i) => {
             const chartColorInput = eleFromStr(`<input style="cursor: pointer" type="color" value="${data[colorField]}">`);
-            let timeout;
-            chartColorInput.oninput = evt => {
-                clearTimeout(timeout);
-                timeout = setTimeout( () => {
-                    data[colorField] = chartColorInput.value;
-                    if(chart.type === 'serial'){
-                        data['_lineColor_'] = chartColorInput.value;
-                    }
-                    chart.validateData();
-                }, 350)
+            chartColorInput.onchange = evt => {
+                chart.dataProvider[i][colorField] = chartColorInput.value;
+                if(chart.type === 'serial'){
+                    chart.dataProvider[i]['_lineColor_'] = chartColorInput.value;
+                }
+                chart.validateData();
             }
             colorsManual.appendChild(chartColorInput);
         })
@@ -118,15 +114,11 @@ function renderColorOptions(chart, texts, colorsDiv) {
             const colorsManual = eleFromStr('<div class="mini-colors"></div>');
             chart.graphs.forEach(graph => {
                 const chartColorInput = eleFromStr(`<input style="cursor: pointer" type="color" value="${graph.fillColors || graph.fillColorsR}">`);
-                let timeout;
-                chartColorInput.oninput = evt => {
-                    clearTimeout(timeout);
-                    timeout = setTimeout( () => {
-                        graph.fillColors = chartColorInput.value;
-                        graph.bulletColor = chartColorInput.value;
-                        graph.lineColor = chartColorInput.value;
-                        chart.validateData();
-                    }, 350)
+                chartColorInput.onchange = evt => {
+                    graph.fillColors = chartColorInput.value;
+                    graph.bulletColor = chartColorInput.value;
+                    graph.lineColor = chartColorInput.value;
+                    chart.validateData();
                 }
                 colorsManual.appendChild(chartColorInput);
             })
@@ -298,6 +290,7 @@ function chartTextToHtml(chart) {
         newTxt.style.fontSize = txt.getAttribute('font-size');
         newTxt.style.color = txt.getAttribute('fill');
         newTxt.style.fontFamily = txt.getAttribute('font-family');
+        console.log(txt.getAttribute('font-family'), txt.getAttribute('font-size'));
         newTxt.style.textAlign = txtAnchorToAlign(txt.getAttribute('text-anchor'));
         let newTop, newLeft;
         if(txt.getAttribute('transform').includes('rotate')){
@@ -433,6 +426,8 @@ function initAmChartExportMenu(chart, i){
     if(! texts ){
         texts = translations['en'];
     }
+    //This is a fix to "inherit" font-family not working
+    chart.fontFamily = getComputedStyle(chart.div).fontFamily;
     const appendToEle = chart.containerDiv.parentElement.parentElement.parentElement;
     //TODO: Add inputs to change colors
     const button = eleFromStr(
@@ -448,7 +443,7 @@ function initAmChartExportMenu(chart, i){
     const chartOptions = eleFromStr('<div class="chart-options-div"></div>');
     //--Global AmChart options--
     //Font Size
-    const fontSizeInput = eleFromStr(`<input type="range" min="5" max="80" value="${chart.fontSize}">`);
+    const fontSizeInput = eleFromStr(`<input type="range" min="8" max="50" value="${chart.fontSize}">`);
     fontSizeInput.oninput = evt => {
         const newFontSize = Number(fontSizeInput.value)
         chart.fontSize = newFontSize;
@@ -511,7 +506,7 @@ function initAmChartExportMenu(chart, i){
     //--Pie Chart options--
     if(chart.type === 'pie'){
         //Pie Radius
-        const chartRadiusInput = eleFromStr(`<input type="range" step="5" min="0" value="${chart.radiusReal || 200}" max="${screen.width/2}">`);
+        const chartRadiusInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.radiusReal || 200}" max="${chart.radiusReal*2 || 350}">`);
         chartRadiusInput.oninput = evt => {
             chart.radius = Number(chartRadiusInput.value);
             chart.validateNow();
@@ -527,7 +522,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.angle}</label>`);
         chartOptions.appendChild(chartAngleInput);
         //Pie Max label width
-        const chartLabelWidthInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.maxLabelWidth || 100}" max="350">`);
+        const chartLabelWidthInput = eleFromStr(`<input type="range" step="5" min="50" value="${chart.maxLabelWidth || 100}" max="250">`);
         chartLabelWidthInput.oninput = evt => {
             chart.maxLabelWidth = Number(chartLabelWidthInput.value);
             chart.validateNow();
@@ -535,7 +530,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.maxLabelWidth}</label>`);
         chartOptions.appendChild(chartLabelWidthInput);
         //Pie label radius
-        const chartLabelRadiusInput = eleFromStr(`<input type="range" step="5" min="-150" value="${chart.labelRadius || 20}" max="500">`);
+        const chartLabelRadiusInput = eleFromStr(`<input type="range" step="1" min="-100" value="${chart.labelRadius || 20}" max="300">`);
         chartLabelRadiusInput.oninput = evt => {
             chart.labelRadius = Number(chartLabelRadiusInput.value);
             chart.validateNow();
@@ -554,7 +549,7 @@ function initAmChartExportMenu(chart, i){
         chartOptions.insertAdjacentHTML('beforeend',`<label>${texts.horizontalMargin}</label>`);
         chartOptions.appendChild(horizontalMarginInput);
         //Vertical Margin
-        const verticalMarginInput = eleFromStr(`<input style="margin-bottom : 1rem" value="${chart.marginBottom}" step="10" type="range" min="0" max="500" value="0">`);
+        const verticalMarginInput = eleFromStr(`<input style="margin-bottom : 1rem" value="${chart.marginBottom}" step="10" type="range" min="0" max="400" value="0">`);
         verticalMarginInput.oninput = evt => {
             chart.autoMargins = false;
             chart.marginTop = Number(verticalMarginInput.value);
